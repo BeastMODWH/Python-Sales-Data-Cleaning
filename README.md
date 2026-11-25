@@ -18,7 +18,7 @@ The raw dataset (`train.csv`) contained `Order Date` and `Ship Date` columns sto
 import pandas as pd
 ```
 # Load the raw data
-```
+```python
 df = pd.read_csv('train.csv')
 ```
 
@@ -26,26 +26,26 @@ df = pd.read_csv('train.csv')
 
 To calculate date math, we must force Pandas to recognize the columns as dates. I used errors='coerce' to safely handle any impossible dates without crashing the script.
 # Convert text to datetime
-```
+```python
 df['Order Date'] = pd.to_datetime(df['Order Date'], errors='coerce')
 df['Ship Date'] = pd.to_datetime(df['Ship Date'], errors='coerce')
 ```
 # Drop rows where dates could not be parsed
-```
+```python
 df = df.dropna(subset=['Order Date', 'Ship Date'])
 ```
 
 ### 3. Calculating Shipping Time
 
 With the dates recognized properly, calculating the difference in days takes just one line of code:
-```
+```python
 df['Days_to_Ship'] = (df['Ship Date'] - df['Order Date']).dt.days
 ```
 
 ### 4. Aggregating the Results
 
 I grouped the cleaned data by Ship Mode to find the average shipping time:
-```
+```python
 avg_shipping = df.groupby('Ship Mode')['Days_to_Ship'].mean().round(2)
 print(avg_shipping)
 ```
@@ -68,6 +68,6 @@ The Python script successfully calculated the average shipping times across the 
 ### 5. Exporting the Clean Data
 
 Finally, the script exports the cleaned dataset to a new CSV file, ready for visualization.
-```
+```python
 df.to_csv('cleaned_sales_data.csv', index=False)
 ```
